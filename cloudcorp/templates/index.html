@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudCorp – Gerenciador de Arquivos</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+
+  <header class="flex justify-between items-center p-6 border-b border-gray-700 bg-gray-800">
+    <h1 class="text-2xl font-bold text-blue-400">☁️ CloudCorp</h1>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="flex items-center gap-2">
+      <input type="file" name="file" class="text-sm text-gray-200" required>
+      <input type="text" name="author" placeholder="Autor" class="bg-gray-700 px-3 py-1 rounded text-sm">
+      <button type="submit" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-500 font-semibold">Upload</button>
+    </form>
+  </header>
+
+  <main class="p-6">
+    <h2 class="text-xl font-bold mb-4">Arquivos Enviados</h2>
+
+    <table class="w-full border border-gray-700 rounded">
+      <thead class="bg-gray-800 text-gray-300 uppercase text-sm">
+        <tr>
+          <th class="p-3 text-left">Nome</th>
+          <th class="p-3 text-left">Autor</th>
+          <th class="p-3 text-left">Status</th>
+          <th class="p-3 text-left">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-700">
+        {% for file in files %}
+        <tr>
+          <td class="p-3">{{ file.name }}</td>
+          <td class="p-3">{{ file.author }}</td>
+          <td class="p-3">
+            {% if file.status == "Aprovado" %}
+              <span class="text-green-400 font-semibold">{{ file.status }}</span>
+            {% elif file.status == "Rejeitado" %}
+              <span class="text-red-400 font-semibold">{{ file.status }}</span>
+            {% else %}
+              <span class="text-yellow-400 font-semibold">{{ file.status }}</span>
+            {% endif %}
+          </td>
+          <td class="p-3 space-x-2">
+            <a href="/update/{{ file.name }}/Aprovado" class="bg-green-600 px-2 py-1 rounded text-sm hover:bg-green-500">Aprovar</a>
+            <a href="/update/{{ file.name }}/Rejeitado" class="bg-red-600 px-2 py-1 rounded text-sm hover:bg-red-500">Rejeitar</a>
+            <a href="/download/{{ file.name }}" class="bg-blue-600 px-2 py-1 rounded text-sm hover:bg-blue-500">Baixar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>
